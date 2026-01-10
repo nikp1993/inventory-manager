@@ -1,0 +1,23 @@
+name: API and E2E Test execution of app catalog manager using github actions
+
+on:
+  workflow_dispatch:
+
+jobs:
+  provision-test-env:
+    uses: ./.github/workflows/provision-test-env.yml
+
+  test-backend:
+    needs: provision-test-env
+    uses: ./.github/workflows/test-backend.yml
+
+  test-frontend:
+    needs: provision-test-env
+    uses: ./.github/workflows/test-frontend.yml
+
+  destroy-test-env:
+    needs:
+      - test-backend
+      - test-frontend
+    uses: ./.github/workflows/destroy-test-env.yml
+    if: always()

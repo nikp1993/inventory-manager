@@ -1,0 +1,14 @@
+name: Test Frontend
+
+on:
+  workflow_call:
+
+jobs:
+  test-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run frontend e2e tests
+        uses: ./.github/actions/run-tests
+        with:
+          test-type: e2e
+          directory: frontend

@@ -1,0 +1,909 @@
+{
+	"info": {
+		"_postman_id": "06d5fa57-a542-4d4c-92e4-6116af11bb98",
+		"name": "InventoryManagerAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12081536"
+	},
+	"item": [
+		{
+			"name": "Positive Cases",
+			"item": [
+				{
+					"name": "Register User A",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"(() => {\r",
+									"    const responseBody = pm.response.json();\r",
+									"    pm.test(\"Status code is 201\", () => pm.response.to.have.status(201));\r",
+									"    pm.test(\"Validate user registration\", () => pm.expect(responseBody.message).to.eql(\"User registered successfully\"));\r",
+									"})();"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Fname User A\",\r\n    \"lastName\": \"Lname User A\",\r\n    \"password\": \"Test345\",\r\n    \"email\":\"UserA@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{APIUrl}}/register",
+							"host": [
+								"{{APIUrl}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login User A",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"(() => {\r",
+									"    const responseBody = pm.response.json();\r",
+									"    pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));\r",
+									"    pm.collectionVariables.set(\"AuthtokenA\", responseBody.token);\r",
+									"})();"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"UserA@gmail.com\",\r\n    \"password\": \"Test345\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{APIUrl}}/login",
+							"host": [
+								"{{APIUrl}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Items User A",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const token = 'Bearer ' + pm.collectionVariables.get('AuthtokenA')\r",
+									"\r",
+									"pm.request.headers.add({\r",
+									"    key: 'Authorization',\r",
+									"    value: token\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{APIUrl}}/items",
+							"host": [
+								"{{APIUrl}}"
+							],
+							"path": [
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Item User A",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const token = 'Bearer ' + pm.collectionVariables.get('AuthtokenA')\r",
+									"\r",
+									"pm.request.headers.add({\r",
+									"    key: 'Authorization',\r",
+									"    value: token\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"(() => {\r",
+									"    const res = pm.response.json();\r",
+									"    pm.test(\"Status code is 201\", () => pm.response.to.have.status(201));\r",
+									"    pm.test(\"Response contains id\", () => pm.expect(res).to.have.property(\"id\"));\r",
+									"    pm.collectionVariables.set(\"ItemIdUserA\", res.id);\r",
+									"})();"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Iphone 18\", \r\n    \"quantity\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{APIUrl}}/items",
+							"host": [
+								"{{APIUrl}}"
+							],
+							"path": [
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Item User A",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const token = 'Bearer ' + pm.collectionVariables.get('AuthtokenA')\r",
+									"const itemId = pm.collectionVariables.get('ItemIdUserA')\r",
+									"\r",
+									"pm.request.headers.add({\r",
+									"    key: 'Authorization',\r",
+									"    value: token\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Mac Book Air\",\r\n    \"quantity\": \"89\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{APIUrl}}/items/{{ItemIdUserA}}",
+							"host": [
+								"{{APIUrl}}"
+							],
+							"path": [
+								"items",
+								"{{ItemIdUserA}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Item User A",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const token = 'Bearer ' + pm.collectionVariables.get('AuthtokenA')\r",
+									"\r",
+									"pm.request.headers.add({\r",
+									"    key: 'Authorization',\r",
+									"    value: token\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{APIUrl}}/items/{{ItemIdUserA}}",
+							"host": [
+								"{{APIUrl}}"
+							],
+							"path": [
+								"items",
+								"{{ItemIdUserA}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register User B",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"(() => {\r",
+									"    const responseBody = pm.response.json();\r",
+									"    pm.test(\"Status code is 201\", () => pm.response.to.have.status(201));\r",
+									"    pm.test(\"Validate user registration\", () => pm.expect(responseBody.message).to.eql(\"User registered successfully\"));\r",
+									"})();"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Fname User B\",\r\n    \"lastName\": \"Lname User B\",\r\n    \"password\": \"TestUserB345\",\r\n    \"email\":\"UserB@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{APIUrl}}/register",
+							"host": [
+								"{{APIUrl}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login User B",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"(() => {\r",
+									"    const responseBody = pm.response.json();\r",
+									"    pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));\r",
+									"    pm.collectionVariables.set(\"AuthtokenB\", responseBody.token);\r",
+									"})();"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"UserB@gmail.com\",\r\n    \"password\": \"TestUserB345\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{APIUrl}}/login",
+							"host": [
+								"{{APIUrl}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Item User B",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const token = 'Bearer ' + pm.collectionVariables.get('AuthtokenB')\r",
+									"\r",
+									"pm.request.headers.add({\r",
+									"    key: 'Authorization',\r",
+									"    value: token\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"(() => {\r",
+									"    const res = pm.response.json();\r",
+									"    pm.test(\"Status code is 201\", () => pm.response.to.have.status(201));\r",
+									"    pm.test(\"Response contains id\", () => pm.expect(res).to.have.property(\"id\"));\r",
+									"    pm.collectionVariables.set(\"ItemIdUserB\", res.id);\r",
+									"})();"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Iphone SE3\", \r\n    \"quantity\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{APIUrl}}/items",
+							"host": [
+								"{{APIUrl}}"
+							],
+							"path": [
+								"items"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Negative Cases",
+			"item": [
+				{
+					"name": "Re-rgister Existing User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"(() => {\r",
+									"    const res = pm.response.json();\r",
+									"    pm.test(\"Status code is 409\", () => pm.response.to.have.status(409));\r",
+									"    pm.test(\"user registration failed as User already exists\", function () {\r",
+									"        pm.expect(res.error).to.eql(\"User already exists\");\r",
+									"    });\r",
+									"})();"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n    \"firstName\": \"Fname User A\",\r\n    \"lastName\": \"Lname User A\",\r\n    \"password\": \"TestUserA345\",\r\n    \"email\":\"UserA@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{APIUrl}}/register",
+							"host": [
+								"{{APIUrl}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login - Invalid Credentials",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"(() => {\r",
+									"    const res = pm.response.json();\r",
+									"    pm.test(\"Status code is 401\", () => pm.response.to.have.status(401));\r",
+									"    pm.test(\"Login failed with error Invalid credentials\", () => pm.expect(res.message).to.eql(\"Invalid credentials\"));\r",
+									"})();"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"bob231@gma\",\r\n    \"password\": \"Test345\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{APIUrl}}/login",
+							"host": [
+								"{{APIUrl}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get items without Access",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"(() => {\r",
+									"    const responseBody = pm.response.json();\r",
+									"    pm.test(\"Status code is 401\", () => pm.response.to.have.status(401));\r",
+									"    pm.test(\"Status message is Unauthorized\", function () {\r",
+									"        pm.response.to.have.status(\"Unauthorized\");\r",
+									"    });\r",
+									"    pm.test(\"Get items failed as access token is missing\", function () {\r",
+									"        pm.expect(responseBody.message).to.eql(\"Access token missing\");\r",
+									"    });\r",
+									"})();"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{APIUrl}}/items",
+							"host": [
+								"{{APIUrl}}"
+							],
+							"path": [
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deleting non-existent item",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const token = 'Bearer ' + pm.collectionVariables.get('AuthtokenA')\r",
+									"\r",
+									"pm.request.headers.add({\r",
+									"    key: 'Authorization',\r",
+									"    value: token\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"(() => {\r",
+									"    const responseBody = pm.response.json();\r",
+									"    pm.test(\"Status code is 404\", () => pm.response.to.have.status(404));\r",
+									"    pm.test(\"Delete item failed as Item not found \", function () {\r",
+									"        pm.expect(responseBody.message).to.eql(\"Item not found\");\r",
+									"    });\r",
+									"})();"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{APIUrl}}/items/5",
+							"host": [
+								"{{APIUrl}}"
+							],
+							"path": [
+								"items",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update non-existent item",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const token = 'Bearer ' + pm.collectionVariables.get('AuthtokenA')\r",
+									"\r",
+									"pm.request.headers.add({\r",
+									"    key: 'Authorization',\r",
+									"    value: token\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"(() => {\r",
+									"    const responseBody = pm.response.json();\r",
+									"    pm.test(\"Status code is 404\", () => pm.response.to.have.status(404));\r",
+									"    pm.test(\"Update item failed as Item not found \", function () {\r",
+									"        pm.expect(responseBody.message).to.eql(\"Item not found\");\r",
+									"    });\r",
+									"})();"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Some name\",\r\n    \"quantity\": \"10\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{APIUrl}}/items/5",
+							"host": [
+								"{{APIUrl}}"
+							],
+							"path": [
+								"items",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete item - Another User",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const token = 'Bearer ' + pm.collectionVariables.get('AuthtokenA')\r",
+									"const itemId = pm.collectionVariables.get('ItemIdUserB')\r",
+									"\r",
+									"pm.request.headers.add({\r",
+									"    key: 'Authorization',\r",
+									"    value: token\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var responseBody = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 403\", function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Forbidden for owner mismatch\", function () {\r",
+									"    pm.expect(responseBody.message).to.eql(\"Forbidden\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{APIUrl}}/items/{{ItemIdUserB}}",
+							"host": [
+								"{{APIUrl}}"
+							],
+							"path": [
+								"items",
+								"{{ItemIdUserB}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update item - Another User",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const token = 'Bearer ' + pm.collectionVariables.get('AuthtokenA')\r",
+									"const itemId = pm.collectionVariables.get('ItemIdUserB')\r",
+									"\r",
+									"pm.request.headers.add({\r",
+									"    key: 'Authorization',\r",
+									"    value: token\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var responseBody = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 403\", function () {\r",
+									"    pm.response.to.have.status(403);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Forbidden for owner mismatch\", function () {\r",
+									"    pm.expect(responseBody.message).to.eql(\"Forbidden\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Some name\",\r\n    \"quantity\": \"10\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{APIUrl}}/items/{{ItemIdUserB}}",
+							"host": [
+								"{{APIUrl}}"
+							],
+							"path": [
+								"items",
+								"{{ItemIdUserB}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "AuthtokenA",
+			"value": ""
+		},
+		{
+			"key": "AuthtokenB",
+			"value": ""
+		},
+		{
+			"key": "ItemIdUserA",
+			"value": ""
+		},
+		{
+			"key": "ItemIdUserB",
+			"value": ""
+		},
+		{
+			"key": "APIUrl",
+			"value": "http://localhost/api"
+		}
+	]
+}

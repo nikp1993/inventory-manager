@@ -23,10 +23,11 @@ describe("Items Service - Unit Tests", () => {
             rows: [{ id: 1, name: "Apple", quantity: 10 }, { id: 2, name: "Banana", quantity: 5 }, { id: 3, name: "Orange", quantity: 8 }]
         });
 
-        const result = await getAllItems();
+        const result = await getAllItems(1);
 
         expect(db.query).toHaveBeenCalledWith(
-            "SELECT * FROM items ORDER BY id"
+            "SELECT id, itemName AS name, quantity, createdBy FROM items WHERE createdBy=$1 ORDER BY id",
+            [1]
         );
         expect(result).toEqual([
             { id: 1, name: "Apple", quantity: 10 },
@@ -40,7 +41,7 @@ describe("Items Service - Unit Tests", () => {
             rows: [{ id: 1, name: "Banana", quantity: 5 }]
         });
 
-        const item = await createItem({ name: "Banana", quantity: 5 });
+        const item = await createItem({ name: "Banana", quantity: 5, createdBy: 1 });
 
         expect(item.name).toBe("Banana");
         expect(item.quantity).toBe(5);
@@ -54,7 +55,7 @@ describe("Items Service - Unit Tests", () => {
         const item = await updateItemById(1, {
             name: "Orange",
             quantity: 8
-        });
+        }, 1);
 
         expect(item.id).toBe(1);
         expect(item.name).toBe("Orange");
@@ -66,7 +67,7 @@ describe("Items Service - Unit Tests", () => {
             rows: [{ id: 1 }]
         });
 
-        const result = await deleteItemById(1);
+        const result = await deleteItemById(1, 1);
 
         expect(result.id).toBe(1);
     });

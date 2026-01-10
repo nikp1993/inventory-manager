@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS users (
+  id SERIAL PRIMARY KEY,
+  firstName VARCHAR(100),
+  lastName VARCHAR(100),
+  email VARCHAR(150) UNIQUE NOT NULL,
+  password TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS items (
+  id SERIAL PRIMARY KEY,
+  itemName VARCHAR(100),
+  quantity INTEGER,
+  createdBy INTEGER REFERENCES users(id)
+);

@@ -1,0 +1,24 @@
+name: Setup Node Environment
+description: Action to set up Node.js environment with specified version and install dependencies
+
+inputs:
+  directory:
+    description: 'Directory where the Node.js project is located'
+    required: true
+    type: string
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v6
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version: '22'
+
+    - name: Install Dependencies
+      run: npm ci
+      shell: bash
+      working-directory: ${{ inputs.directory }}

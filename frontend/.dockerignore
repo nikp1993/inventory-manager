@@ -1,0 +1,6 @@
+E2ETests/
+node_modules/
+.gitignore
+playwright.config.ts
+README.md
+.env

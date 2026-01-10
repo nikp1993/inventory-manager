@@ -6,7 +6,7 @@
   "scripts": {
     "start-backend": "node src/server.js",
     "test:unit": "cross-env NODE_ENV=test node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
-    "test": "npm run test:unit"
+    "test:api": "newman run ./api_tests/InventoryManagerAPI.postman_collection.json --reporters cli"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -21,6 +21,7 @@
   "devDependencies": {
     "cross-env": "^10.1.0",
     "jest": "^30.2.0",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "newman": "^6.2.1"
   }
 }

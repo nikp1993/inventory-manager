@@ -1,0 +1,12 @@
+name: Destroy Test Environment
+
+on:
+  workflow_call:
+
+jobs:
+  destroy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Stop application
+        run: docker compose down --rmi all -v
+        if: always()

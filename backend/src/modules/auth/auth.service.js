@@ -7,7 +7,7 @@ export async function registerUser({ firstName, lastName, email, password }) {
     const hashedPassword = await hash(password, 10);
 
     await query(
-        `INSERT INTO users (first_name, last_name, email, password)
+        `INSERT INTO users (firstName, lastName, email, password)
      VALUES ($1, $2, $3, $4)`,
         [firstName, lastName, email, hashedPassword]
     );
