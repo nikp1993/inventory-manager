@@ -1,0 +1,33 @@
+name: Publish Docker Images
+
+on:
+  workflow_call:
+
+jobs:
+    publish-images:
+        runs-on: ubuntu-latest
+        defaults:
+          run:
+            shell: bash
+        steps:
+        - uses: actions/checkout@v6
+
+        - name: Load docker images from artifacts
+          uses: actions/download-artifact@v6
+          with:
+            name: app-artifacts
+
+        - name: Load application docker image
+          run: |
+            docker load -i backend.tar
+            docker load -i frontend.tar
+            docker images ls
+
+        - name: Publish images to GitHub Container Registry
+          run: |
+            IMAGE_TAG=${{ github.sha }}
+            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            docker tag inventory-manager-backend:latest ghcr.io/${{ github.repository_owner }}/inventory-manager-backend:$IMAGE_TAG
+            docker tag inventory-manager-frontend:latest ghcr.io/${{ github.repository_owner }}/inventory-manager-frontend:$IMAGE_TAG
+            docker push ghcr.io/${{ github.repository_owner }}/inventory-manager-backend:$IMAGE_TAG
+            docker push ghcr.io/${{ github.repository_owner }}/inventory-manager-frontend:$IMAGE_TAG

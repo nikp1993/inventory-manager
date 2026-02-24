@@ -1,0 +1,32 @@
+name: Initialize Terraform Environment and validate
+description: Action to initialize and validate Terraform environment for a specified directory
+
+inputs:
+  directory:
+    description: 'Directory where Terraform configuration is located'
+    required: true
+    type: string
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: '1.12.0'
+        terraform_wrapper: false
+
+    - name: Formatting check
+      run: terraform fmt -check -recursive
+      shell: bash
+      working-directory: infra/terraform
+
+    - name: Initialize Terraform
+      run: terraform init
+      shell: bash
+      working-directory: ${{ inputs.directory }}
+
+    - name: Validate Terraform configuration
+      run: terraform validate
+      shell: bash
+      working-directory: ${{ inputs.directory }}

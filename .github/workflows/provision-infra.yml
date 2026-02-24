@@ -1,0 +1,35 @@
+name: Provision Infrastructure with Terraform
+
+on:
+  workflow_call:
+
+jobs:
+  provision-infra:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Check changes in Terraform configuration
+        id: terraform-changes
+        uses: ./.github/actions/check-diff
+        with:
+          directory: infra/terraform/
+
+      - name: Set up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        if: steps.terraform-changes.outputs.diff_detected == 'true'
+        with:
+          role-to-assume: ${{ secrets.AWS_GITHUB_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Initialize Terraform Environment
+        uses: ./.github/actions/init-terraform
+        if: steps.terraform-changes.outputs.diff_detected == 'true'
+        with:
+          directory: infra/terraform/env/dev
+
+      - name: Plan and Apply Terraform Configuration
+        uses: ./.github/actions/apply-terraform
+        if: steps.terraform-changes.outputs.diff_detected == 'true'
+        with:
+          directory: infra/terraform/env/dev

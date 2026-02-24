@@ -1,23 +1,30 @@
-name: API and E2E Test execution of app catalog manager using github actions
+name: CI/CD Pipeline for Inventory Manager - Build, Test, and Publish Docker Images
 
 on:
   workflow_dispatch:
 
-jobs:
-  provision-test-env:
-    uses: ./.github/workflows/provision-test-env.yml
+permissions:
+  contents: read
+  id-token: write
+  packages: write
 
+jobs:
+  provision-infra:
+    uses: ./.github/workflows/provision-infra.yml
+
+  build-images:
+    uses: ./.github/workflows/build-images.yml
+    
   test-backend:
-    needs: provision-test-env
+    needs: build-images
     uses: ./.github/workflows/test-backend.yml
 
   test-frontend:
-    needs: provision-test-env
+    needs: build-images
     uses: ./.github/workflows/test-frontend.yml
 
-  destroy-test-env:
-    needs:
+  publish-images:
+    needs: 
       - test-backend
       - test-frontend
-    uses: ./.github/workflows/destroy-test-env.yml
-    if: always()
+    uses: ./.github/workflows/publish-images.yml

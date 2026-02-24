@@ -1,0 +1,21 @@
+name: Check Diff
+description: Action to detect changes in a specified directory
+
+inputs:
+  directory:
+    description: 'Directory to check for changes'
+    required: true
+    type: string
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check for changes in the specified directory
+      id: check_diff
+      run: |
+        if git diff --name-only HEAD^ HEAD ${{ inputs.directory }} | grep .; then
+          echo "diff_detected=true" >> $GITHUB_OUTPUT
+        else
+          echo "diff_detected=false" >> $GITHUB_OUTPUT
+        fi
+      shell: bash

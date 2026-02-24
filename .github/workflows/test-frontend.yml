@@ -6,9 +6,35 @@ on:
 jobs:
   test-frontend:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: frontend
     steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup frontend
+        uses: ./.github/actions/setup-node
+        
+      - name: Load docker images from artifacts
+        uses: actions/download-artifact@v6
+        with:
+          name: app-artifacts
+
+      - name: Load application docker image
+        run: |
+          docker load -i backend.tar
+          docker load -i frontend.tar
+          docker images ls
+
+      - name: Build and Start application
+        run: docker compose up -d
+
       - name: Run frontend e2e tests
         uses: ./.github/actions/run-tests
         with:
           test-type: e2e
-          directory: frontend
+
+      - name: Stop application
+        run: docker compose down --rmi all -v
+        if: always()

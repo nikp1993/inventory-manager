@@ -1,0 +1,36 @@
+name: Build Docker Images
+
+on:
+  workflow_call:
+
+jobs:
+    build-images:
+        runs-on: ubuntu-latest
+        defaults:
+          run:
+            shell: bash
+        steps:
+        - uses: actions/checkout@v6
+    
+        - name: Build docker images
+          run: docker compose build
+
+        - name: Save docker images as artifacts
+          run: |
+            mkdir image-artifacts
+            docker save inventory-manager-backend:latest -o image-artifacts/backend.tar
+            docker save inventory-manager-frontend:latest -o image-artifacts/frontend.tar
+        
+        - name: Upload docker images as artifacts
+          uses: actions/upload-artifact@v6
+          with:
+            name: app-artifacts
+            path: image-artifacts/*.tar
+            if-no-files-found: error
+            retention-days: 3
+            overwrite: true
+
+        - name: Clean up local docker images and artifacts
+          run: |
+            docker image prune --all --force
+            rm -rf image-artifacts

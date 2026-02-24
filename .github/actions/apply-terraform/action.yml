@@ -1,0 +1,21 @@
+name: Plan and Apply Terraform Configuration
+description: Action to plan and apply Terraform configuration for a specified directory
+
+inputs:
+  directory:
+    description: 'Directory where Terraform configuration is located'
+    required: true
+    type: string
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Plan Terraform configuration
+      run: terraform plan -out=tfplan
+      shell: bash
+      working-directory: ${{ inputs.directory }}
+
+    - name: Apply Terraform configuration
+      run: terraform apply -auto-approve tfplan
+      shell: bash
+      working-directory: ${{ inputs.directory }}
