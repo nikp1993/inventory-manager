@@ -2,7 +2,7 @@ terraform/env/dev/aws/.terraform.lock.hcl
 terraform/env/dev/aws/.terraform/
 terraform/env/dev/azure/.terraform.lock.hcl
 terraform/env/dev/azure/.terraform/
-terraform/env/dev/bootstrap/.terraform.lock.hcl
-terraform/env/dev/bootstrap/.terraform/
-terraform/env/dev/bootstrap/*.tfstate*
+terraform/modules/aws/bootstrap/.terraform.lock.hcl
+terraform/modules/aws/bootstrap/.terraform/
+terraform/modules/aws/bootstrap/*.tfstate*
 terraform/modules/azure/
