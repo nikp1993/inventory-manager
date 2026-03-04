@@ -6,6 +6,11 @@ inputs:
     description: 'Type of tests to run (e.g., "api", "unit")'
     required: true
     type: string
+
+  working-directory:
+    description: 'Directory to run tests in'
+    required: true
+    type: string
     
 runs:
   using: 'composite'
@@ -13,3 +18,4 @@ runs:
     - name: Run ${{ inputs.test-type }} Tests
       run: npm run test:${{ inputs.test-type }}
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
