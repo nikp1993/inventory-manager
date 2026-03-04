@@ -2,11 +2,24 @@ name: CI/CD Pipeline for Inventory Manager - Build, Test, and Publish Docker Ima
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
 
 permissions:
   contents: read
   id-token: write
   packages: write
+
+env:
+  IMAGE_TAG: ${{ github.sha }}
+  GHCR_OWNER: ${{ github.repository_owner }}
+  POSTGRES_USER: ${{ secrets.POSTGRES_USERNAME }}
+  POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+  JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
 
 jobs:
   provision-infra:
@@ -27,4 +40,10 @@ jobs:
     needs: 
       - test-backend
       - test-frontend
+    if: (github.event_name != 'pull_request' && github.ref == 'refs/heads/main')
     uses: ./.github/workflows/publish-images.yml
+
+  deploy:
+    needs: publish-images
+    if: (github.event_name != 'pull_request' && github.ref == 'refs/heads/main')
+    uses: ./.github/workflows/deploy.yml

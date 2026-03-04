@@ -1,0 +1,46 @@
+name: Deploy to EC2
+
+on:
+  workflow_call:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ secrets.AWS_GITHUB_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Deploy via SSM
+        run: |
+          aws ssm send-command \
+            --document-name "AWS-RunShellScript" \
+            --targets "Key=tag:Name,Values=inventory-dev-ec2" \
+            --parameters commands='[
+              "set -e",
+              "mkdir -p /app",
+              "cd /app",
+              "echo Writing docker-compose file",
+              "cat > docker-compose.prod.yml <<EOF",
+              "'"$(sed 's/"/\\"/g' docker-compose.prod.yml)"'" ,
+              "EOF",
+              "echo Writing nginx.conf",
+              "mkdir -p nginx",
+              "cat > nginx/nginx.conf <<EOF",
+              "'"$(sed 's/"/\\"/g' nginx/nginx.conf)"'" ,
+              "EOF",
+              "export IMAGE_TAG=${{ github.sha }}",
+              "export GHCR_OWNER=${{ github.repository_owner }}",
+              "export POSTGRES_USER=${{ secrets.POSTGRES_USERNAME }}",
+              "export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}",
+              "export JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}",
+              "docker compose -f docker-compose.prod.yml pull",
+              "docker compose -f docker-compose.prod.yml up -d --remove-orphans"
+            ]' \
+            --comment "Deploy Inventory Manager" \
+            --region us-east-1

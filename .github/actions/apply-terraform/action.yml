@@ -19,3 +19,4 @@ runs:
       run: terraform apply -auto-approve tfplan
       shell: bash
       working-directory: ${{ inputs.directory }}
+      if: (github.event_name != 'pull_request' && github.ref == 'refs/heads/main')
