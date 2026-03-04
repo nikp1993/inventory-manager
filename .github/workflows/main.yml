@@ -24,10 +24,18 @@ jobs:
   test-backend:
     needs: build-images
     uses: ./.github/workflows/test-backend.yml
+    secrets:
+      POSTGRES_USERNAME: ${{ secrets.POSTGRES_USERNAME }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
 
   test-frontend:
     needs: build-images
     uses: ./.github/workflows/test-frontend.yml
+    secrets:
+      POSTGRES_USERNAME: ${{ secrets.POSTGRES_USERNAME }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
 
   publish-images:
     needs: 

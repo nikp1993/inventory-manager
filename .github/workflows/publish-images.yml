@@ -21,13 +21,11 @@ jobs:
           run: |
             docker load -i backend.tar
             docker load -i frontend.tar
-            docker images ls
+            docker image ls
 
         - name: Publish images to GitHub Container Registry
           run: |
-            IMAGE_TAG=${{ github.sha }}
-            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            docker tag inventory-manager-backend:latest ghcr.io/${{ github.repository_owner }}/inventory-manager-backend:$IMAGE_TAG
-            docker tag inventory-manager-frontend:latest ghcr.io/${{ github.repository_owner }}/inventory-manager-frontend:$IMAGE_TAG
-            docker push ghcr.io/${{ github.repository_owner }}/inventory-manager-backend:$IMAGE_TAG
-            docker push ghcr.io/${{ github.repository_owner }}/inventory-manager-frontend:$IMAGE_TAG
+            docker tag inventory-manager-backend:latest ghcr.io/${{ github.repository_owner }}/inventory-manager-backend:${{ github.sha }}
+            docker tag inventory-manager-frontend:latest ghcr.io/${{ github.repository_owner }}/inventory-manager-frontend:${{ github.sha }}
+            docker push ghcr.io/${{ github.repository_owner }}/inventory-manager-backend:${{ github.sha }}
+            docker push ghcr.io/${{ github.repository_owner }}/inventory-manager-frontend:${{ github.sha }}

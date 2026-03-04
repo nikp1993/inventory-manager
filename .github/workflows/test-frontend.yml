@@ -2,12 +2,19 @@ name: Test Frontend
 
 on:
   workflow_call:
+    secrets:
+      POSTGRES_USERNAME:
+        required: true
+      POSTGRES_PASSWORD:
+        required: true
+      JWT_SECRET_KEY:
+        required: true
 
 env:
   POSTGRES_USER: ${{ secrets.POSTGRES_USERNAME }}
   POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
   JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-  
+
 jobs:
   test-frontend:
     runs-on: ubuntu-latest
