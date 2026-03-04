@@ -1,4 +1,4 @@
-name: CI/CD Pipeline for Inventory Manager - Build, Test, and Publish Docker Images
+name: CI/CD Pipeline for Inventory Manager - Build, Test, Publish and Deploy Docker Images
 
 on:
   workflow_dispatch:
@@ -13,13 +13,6 @@ permissions:
   contents: read
   id-token: write
   packages: write
-
-env:
-  IMAGE_TAG: ${{ github.sha }}
-  GHCR_OWNER: ${{ github.repository_owner }}
-  POSTGRES_USER: ${{ secrets.POSTGRES_USERNAME }}
-  POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-  JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
 
 jobs:
   provision-infra:
