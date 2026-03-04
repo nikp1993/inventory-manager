@@ -26,7 +26,7 @@ jobs:
         run: |
           docker load -i backend.tar
           docker load -i frontend.tar
-          docker images ls
+          docker image ls
 
       - name: Build and Start application
         run: docker compose up -d
