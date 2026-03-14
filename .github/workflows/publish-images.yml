@@ -25,6 +25,7 @@ jobs:
 
         - name: Publish images to GitHub Container Registry
           run: |
+            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             docker tag inventory-manager-backend:latest ghcr.io/${{ github.repository_owner }}/inventory-manager-backend:${{ github.sha }}
             docker tag inventory-manager-frontend:latest ghcr.io/${{ github.repository_owner }}/inventory-manager-frontend:${{ github.sha }}
             docker push ghcr.io/${{ github.repository_owner }}/inventory-manager-backend:${{ github.sha }}
