@@ -29,7 +29,13 @@ jobs:
         with:
           working-directory: frontend
 
-      - name: Install playwright browsers
+      - name: Run frontend component tests
+        uses: ./.github/actions/run-tests
+        with:
+          test-type: component
+          working-directory: frontend
+
+      - name: Install playwright browsers 
         run: npx playwright install --with-deps
         working-directory: frontend
 
