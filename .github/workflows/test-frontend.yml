@@ -29,15 +29,15 @@ jobs:
         with:
           working-directory: frontend
 
+      - name: Install cypress 
+        run: npx cypress install
+        working-directory: frontend
+
       - name: Run frontend component tests
         uses: ./.github/actions/run-tests
         with:
           test-type: component
           working-directory: frontend
-
-      - name: Install playwright browsers 
-        run: npx playwright install --with-deps
-        working-directory: frontend
 
       - name: Load docker images from artifacts
         uses: actions/download-artifact@v6

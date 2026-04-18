@@ -6,8 +6,13 @@ export default defineConfig({
             framework: "react",
             bundler: "vite",
         },
-        supportFile: "src/cypress/support/component.ts",
+        supportFile: "cypress/component/support/component.ts",
         specPattern: "src/components/**/*.spec.cy.{ts,tsx}",
-        indexHtmlFile: "src/cypress/support/component-index.html",
+        indexHtmlFile: "cypress/component/support/component-index.html",
+    },
+    e2e: {
+        specPattern: "cypress/e2e/tests/*.spec.cy.ts",
+        supportFile: "cypress/e2e/support/e2e.ts",
+        baseUrl: "http://localhost",
     },
 });

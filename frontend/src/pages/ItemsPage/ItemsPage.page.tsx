@@ -154,7 +154,7 @@ const ItemsPage: React.FC = () => {
       {loading ? (
         <p className={styles.muted}>Loading items...</p>
       ) : items.length === 0 ? (
-        <p className={styles.muted}>No items found.</p>
+        <p className={styles.muted} data-testid="noItemsText">No items found.</p>
       ) : (
         <ItemsTable items={items} onStartEdit={startEditing} onDelete={handleDeleteItem} />
       )}
@@ -162,11 +162,11 @@ const ItemsPage: React.FC = () => {
       {editingId !== null && (
         <div className={styles.editPanel}>
           <h4>Edit Item</h4>
-          <TextInput value={editName} onChange={(e) => setEditName(e.target.value)} />
-          <TextInput type="number" min={1} value={editQuantity} onChange={(e) => setEditQuantity(Number(e.target.value))} />
+          <TextInput data-testid="editName" value={editName} onChange={(e) => setEditName(e.target.value)} />
+          <TextInput data-testid="editQuantity" type="number" min={1} value={editQuantity} onChange={(e) => setEditQuantity(Number(e.target.value))} />
           <div className={styles.editActions}>
-            <Button onClick={saveEditing}>Save</Button>
-            <Button variant="muted" onClick={cancelEditing}>Cancel</Button>
+            <Button data-testid="editSave" onClick={saveEditing}>Save</Button>
+            <Button data-testid="cancelEdit" variant="muted" onClick={cancelEditing}>Cancel</Button>
           </div>
         </div>
       )}

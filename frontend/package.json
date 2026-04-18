@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test:e2e": "npx playwright test",
+    "test:e2e": "npx cypress run --e2e",
     "test:component": "npx cypress run --component"
   },
   "dependencies": {
