@@ -17,8 +17,7 @@ permissions:
 jobs:
   provision-infra:
     uses: ./.github/workflows/provision-infra.yml
-    secrets: 
-      AWS_GITHUB_ROLE_ARN: ${{ secrets.AWS_GITHUB_ROLE_ARN }}
+    secrets: inherit
 
   build-images:
     uses: ./.github/workflows/build-images.yml
