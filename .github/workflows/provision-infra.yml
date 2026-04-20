@@ -2,10 +2,9 @@ name: Provision Infrastructure with Terraform
 
 on:
   workflow_call:
-
-permissions:
-  contents: read
-  id-token: write
+    secrets:
+      AWS_GITHUB_ROLE_ARN:
+        required: true
 
 jobs:
   provision-infra:
