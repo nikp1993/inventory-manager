@@ -20,6 +20,11 @@ jobs:
         with:
           directory: .github/workflows
 
+      - name: Output Terraform changes result
+        run: |
+          echo "Terraform changes detected: ${{ steps.terraform-changes.outputs.diff_detected }}"
+          echo "AWS GITHUB_ROLE_ARN: ${{ secrets.AWS_GITHUB_ROLE_ARN }}"
+
       - name: Set up AWS credentials
         uses: aws-actions/configure-aws-credentials@v6
         if: steps.terraform-changes.outputs.diff_detected == 'true'
