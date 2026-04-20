@@ -15,7 +15,7 @@ jobs:
         id: terraform-changes
         uses: ./.github/actions/check-diff
         with:
-          directory: .github/workflows
+          directory: infra/terraform
 
       - name: Set up AWS credentials
         uses: aws-actions/configure-aws-credentials@v6
