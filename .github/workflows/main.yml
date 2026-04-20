@@ -17,6 +17,7 @@ permissions:
 jobs:
   provision-infra:
     uses: ./.github/workflows/provision-infra.yml
+    secrets: inherit
 
   build-images:
     uses: ./.github/workflows/build-images.yml

@@ -10,6 +10,7 @@ inputs:
 outputs:
   diff_detected:
     description: 'Indicates if changes were detected in the specified directory'
+    value: ${{ steps.check_diff.outputs.diff_detected }}
 
 runs:
   using: "composite"
