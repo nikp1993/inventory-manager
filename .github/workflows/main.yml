@@ -49,3 +49,4 @@ jobs:
     needs: publish-images
     if: (github.event_name != 'pull_request' && github.ref == 'refs/heads/main')
     uses: ./.github/workflows/deploy.yml
+    secrets: inherit
