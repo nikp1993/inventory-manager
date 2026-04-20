@@ -12,22 +12,21 @@ outputs:
     description: 'Indicates if changes were detected in the specified directory'
 
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Determine diff range
       id: range
       shell: bash
       run: |
+        set -euo pipefail
         if [[ "${{ github.event_name }}" == "pull_request" ]]; then
           echo "base=${{ github.event.pull_request.base.sha }}" >> $GITHUB_OUTPUT
           echo "head=${{ github.event.pull_request.head.sha }}" >> $GITHUB_OUTPUT
           echo "mode=diff" >> $GITHUB_OUTPUT
-  
         elif [[ "${{ github.event_name }}" == "push" ]]; then
           echo "base=${{ github.event.before }}" >> $GITHUB_OUTPUT
           echo "head=${{ github.sha }}" >> $GITHUB_OUTPUT
           echo "mode=diff" >> $GITHUB_OUTPUT
-
         else
           echo "mode=always" >> $GITHUB_OUTPUT
         fi
@@ -36,18 +35,28 @@ runs:
       id: check_diff
       shell: bash
       run: |
+        set -euo pipefail
         MODE="${{ steps.range.outputs.mode }}"
+
+        # debug
+        echo "DEBUG: MODE=${MODE}"
+        echo "DEBUG: BASE=${{ steps.range.outputs.base }}"
+        echo "DEBUG: HEAD=${{ steps.range.outputs.head }}"
+        echo "DEBUG: directory=${{ inputs.directory }}"
 
         if [[ "$MODE" == "always" ]]; then
           echo "diff_detected=true" >> $GITHUB_OUTPUT
+          echo "DEBUG: wrote diff_detected=true"
           exit 0
         fi
 
         BASE="${{ steps.range.outputs.base }}"
         HEAD="${{ steps.range.outputs.head }}"
 
-        if git diff --name-only "$BASE" "$HEAD" ${{ inputs.directory }} | grep .; then
+        if git diff --name-only "$BASE" "$HEAD" "${{ inputs.directory }}" | grep .; then
           echo "diff_detected=true" >> $GITHUB_OUTPUT
+          echo "DEBUG: wrote diff_detected=true"
         else
           echo "diff_detected=false" >> $GITHUB_OUTPUT
+          echo "DEBUG: wrote diff_detected=false"
         fi
