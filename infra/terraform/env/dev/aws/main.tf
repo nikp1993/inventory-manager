@@ -18,6 +18,7 @@ module "ec2" {
   security_group_id         = module.security_group.security_group_id
   subnet_id                 = module.vpc.subnet_id
   tags = {
-    Name = "inventory-dev-ec2"
+    Name        = "inventory-manager-ec2"
+    Environment = "dev"
   }
 }
