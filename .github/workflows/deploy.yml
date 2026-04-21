@@ -19,7 +19,7 @@ jobs:
       - name: Get AWS Instance ID
         id: get-instance-id
         run: |
-          INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=inventory-manager-ec2" --query "Tags[0].ResourceId" --output text)
+          INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=inventory-manager-ec2" "Name=instance-state-name,Values=running" --query "Reservations[0].Instances[0].InstanceId"  --region "us-east-1" --output text)
           echo "Instance ID: $INSTANCE_ID"
           echo "INSTANCE_ID=$INSTANCE_ID" >> $GITHUB_OUTPUT
 
