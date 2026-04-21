@@ -17,4 +17,7 @@ module "ec2" {
   iam_instance_profile_name = module.iam_profile.profile_name
   security_group_id         = module.security_group.security_group_id
   subnet_id                 = module.vpc.subnet_id
+  tags = {
+    Name = "inventory-dev-ec2"
+  }
 }

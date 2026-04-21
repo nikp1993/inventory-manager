@@ -28,4 +28,5 @@ resource "aws_instance" "app" {
   }
 
   user_data = file("${path.module}/setup_ec2.sh")
+  tags      = var.tags
 }

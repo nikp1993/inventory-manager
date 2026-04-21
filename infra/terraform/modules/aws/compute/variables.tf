@@ -12,3 +12,8 @@ variable "iam_instance_profile_name" {
   description = "The name of the IAM instance profile to associate with the compute resources"
   type        = string
 }
+
+variable "tags" {
+  description = "A map of tags to apply to the compute resources"
+  type        = map(string)
+}

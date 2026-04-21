@@ -16,11 +16,18 @@ jobs:
           role-to-assume: ${{ secrets.AWS_GITHUB_ROLE_ARN }}
           aws-region: us-east-1
 
+      - name: Get AWS Instance ID
+        id: get-instance-id
+        run: |
+          INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=inventory-manager-ec2" --query "Tags[0].ResourceId" --output text)
+          echo "Instance ID: $INSTANCE_ID"
+          echo "INSTANCE_ID=$INSTANCE_ID" >> $GITHUB_OUTPUT
+
       - name: Deploy via SSM
         run: |
           aws ssm send-command \
             --document-name "AWS-RunShellScript" \
-            --targets "Key=tag:Name,Values=inventory-dev-ec2" \
+            --instance-ids ${{ steps.get-instance-id.outputs.INSTANCE_ID }} \
             --parameters commands='[
               "set -e",
               "mkdir -p /app",
